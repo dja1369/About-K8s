@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echo-deploy
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: echo
+      tier: app
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: # 한번에 3개씩 생성하고 3개씩 삭제
+      maxSurge: 3
+      maxUnavailable: 3
+  template:
+    metadata:
+      labels:
+        app: echo
+        tier: app
+    spec:
+      containers:
+        - name: echo
+          image: ghcr.io/subicura/echo:v2
